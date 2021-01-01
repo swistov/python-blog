@@ -7,6 +7,10 @@ from .models import News
 
 
 class NewsForm(forms.ModelForm):
+    """
+    :param fields - поля для отображения
+    :param widgets - дополнительные параметры
+    """
     class Meta:
         model = News
         fields = ['title', 'content', 'is_published', 'category']
@@ -17,6 +21,11 @@ class NewsForm(forms.ModelForm):
         }
 
     def clean_title(self):
+        """
+        Дополнительная проверка
+        Проверяем что-бы title не начинался с цифры
+        :return: title или ошибку
+        """
         title = self.cleaned_data['title']
         if re.match(r'\d', title):
             raise ValidationError('Название не должно начинаться с цифры')

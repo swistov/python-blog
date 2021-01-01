@@ -1,8 +1,26 @@
-from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import render
+from django.views.generic import ListView
 
 from .forms import NewsForm
 from .models import News, Categories
+
+
+class HomeNews(ListView):
+    model = News
+    template_name = 'news/home_news_list.html'
+    context_object_name = 'news'
+    # extra_context = {'title': 'Главная'}
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        """Добавление кастомных полей"""
+        context = super(HomeNews, self).get_context_data(**kwargs)
+        context['title'] = 'Главная страница'
+        return context
+
+    def get_queryset(self):
+        """Выводить только опубликованные новости"""
+        return News.objects.filter(is_published=True)
 
 
 def index(request):
