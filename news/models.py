@@ -26,9 +26,7 @@ class News(models.Model):
         upload_to="photos/%Y/%m/%d/", verbose_name="Фото", blank=True
     )
     is_published = models.BooleanField(default=True, verbose_name="Опубликовано")
-    category = models.ForeignKey(
-        Categories, on_delete=models.PROTECT, verbose_name="Категория", null=True
-    )
+    category = models.ForeignKey(Categories, on_delete=models.PROTECT, verbose_name="Категория")
 
     def __str__(self):
         return self.title
