@@ -38,4 +38,4 @@ class News(models.Model):
 
     def get_absolute_url(self):
         """Возвращает сгенерированную ссылку на объект"""
-        return reverse('view_news', kwargs={'news_id': self.pk})
+        return reverse('view_news', kwargs={'pk': self.pk})

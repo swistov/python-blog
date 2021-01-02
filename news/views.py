@@ -42,8 +42,11 @@ class NewsByCategory(ListView):
 
 class ViewNews(DetailView):
     model = News
-
-
+    """Если в url используется название отличное от pk"""
+    # pk_url_kwarg = 'news_id'
+    # template_name = 'news/news_detail.html'
+    """В стандарте используется наименование object"""
+    context_object_name = 'news_item'
 
 # def index(request):
 #     news = News.objects.all()
@@ -66,10 +69,10 @@ class ViewNews(DetailView):
 #     return render(request, "news/category.html", context)
 
 
-def view_news(request, news_id: int):
-    # news_item = News.objects.get(pk=news_id)
-    news_item = get_object_or_404(News, pk=news_id)
-    return render(request, 'news/view_news.html', {'news_item': news_item})
+# def view_news(request, news_id: int):
+#     # news_item = News.objects.get(pk=news_id)
+#     news_item = get_object_or_404(News, pk=news_id)
+#     return render(request, 'news/view_news.html', {'news_item': news_item})
 
 
 def add_news(request):
