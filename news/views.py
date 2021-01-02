@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from .forms import NewsForm
 from .models import News, Categories
@@ -23,25 +23,47 @@ class HomeNews(ListView):
         return News.objects.filter(is_published=True)
 
 
-def index(request):
-    news = News.objects.all()
-    context = {
-        "news": news,
-        "title": "Список новостей",
-    }
-    return render(request=request, template_name="news/index.html", context=context)
+class NewsByCategory(ListView):
+    model = News
+    template_name = 'news/home_news_list.html'
+    context_object_name = 'news'
+    """Запрет на показ пустых списков"""
+    allow_empty = False
+
+    def get_queryset(self):
+        """Выводить новости категории"""
+        return News.objects.filter(category_id=self.kwargs['category_id'], is_published=True)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(NewsByCategory, self).get_context_data(**kwargs)
+        context['title'] = Categories.objects.get(pk=self.kwargs['category_id'])
+        return context
 
 
-def get_category(request, category_id: int):
-    news = News.objects.filter(category_id=category_id)
-    categories = Categories.objects.all()
-    category = Categories.objects.get(pk=category_id)
-    context = {
-        "news": news,
-        'categories': categories,
-        'category': category,
-    }
-    return render(request, "news/category.html", context)
+class ViewNews(DetailView):
+    model = News
+
+
+
+# def index(request):
+#     news = News.objects.all()
+#     context = {
+#         "news": news,
+#         "title": "Список новостей",
+#     }
+#     return render(request=request, template_name="news/index.html", context=context)
+
+
+# def get_category(request, category_id: int):
+#     news = News.objects.filter(category_id=category_id)
+#     categories = Categories.objects.all()
+#     category = Categories.objects.get(pk=category_id)
+#     context = {
+#         "news": news,
+#         'categories': categories,
+#         'category': category,
+#     }
+#     return render(request, "news/category.html", context)
 
 
 def view_news(request, news_id: int):
