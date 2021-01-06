@@ -1,7 +1,4 @@
-from django.shortcuts import get_object_or_404, redirect
-from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
-from django.urls import reverse_lazy
 
 from .forms import NewsForm
 from .models import News, Categories
