@@ -1,20 +1,23 @@
 from django.views.generic import ListView, DetailView, CreateView
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import NewsForm
 from .models import News, Categories
+from .utils import MyMixin
 
 
-class HomeNews(ListView):
+class HomeNews(MyMixin, ListView):
     model = News
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
     # extra_context = {'title': 'Главная'}
     queryset = News.objects.select_related('category')
+    mixin_prop = 'hello world'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         """Добавление кастомных полей"""
         context = super(HomeNews, self).get_context_data(**kwargs)
-        context['title'] = 'Главная страница'
+        context['title'] = self.get_upper('Главная страница')
+        context['mixin_prop'] = self.get_prop()
         return context
 
     # def get_queryset(self):
@@ -22,7 +25,7 @@ class HomeNews(ListView):
     #     return News.objects.filter(is_published=True).select_related('category')
 
 
-class NewsByCategory(ListView):
+class NewsByCategory(MyMixin, ListView):
     model = News
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
@@ -35,7 +38,7 @@ class NewsByCategory(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(NewsByCategory, self).get_context_data(**kwargs)
-        context['title'] = Categories.objects.get(pk=self.kwargs['category_id'])
+        context['title'] = self.get_upper(Categories.objects.get(pk=self.kwargs['category_id']))
         return context
 
 
@@ -48,10 +51,13 @@ class ViewNews(DetailView):
     context_object_name = 'news_item'
 
 
-class CreateNews(CreateView):
+class CreateNews(LoginRequiredMixin, CreateView):
     form_class = NewsForm
     template_name = 'news/add_news.html'
     """Адрес для пересылки, если не используется get_absolute_url"""
+    login_url = '/admin/'
+    """Вместо перенаправления возвращает 403"""
+    # raise_exception = True
     # success_url = reverse_lazy('home')
 
 
