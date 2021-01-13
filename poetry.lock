@@ -117,6 +117,14 @@ Django = ">=2.2"
 sqlparse = ">=0.2.0"
 
 [[package]]
+name = "django-environ"
+version = "0.4.5"
+description = "Django-environ allows you to utilize 12factor inspired environment variables to configure your Django application."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "ipython"
 version = "7.19.0"
 description = "IPython: Productive Interactive Computing"
@@ -366,7 +374,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "ca62ea3340357239f4e444bc4a87d6cd0eb459e446d9c8439e0d1ad1b4551bf6"
+content-hash = "d97e8fc8fdbbc32dd1ef121789cfca54e41b7c376b4fffc9f994d5b7edc2c253"
 
 [metadata.files]
 appdirs = [
@@ -411,6 +419,10 @@ django = [
 django-debug-toolbar = [
     {file = "django-debug-toolbar-3.2.tar.gz", hash = "sha256:84e2607d900dbd571df0a2acf380b47c088efb787dce9805aefeb407341961d2"},
     {file = "django_debug_toolbar-3.2-py3-none-any.whl", hash = "sha256:9e5a25d0c965f7e686f6a8ba23613ca9ca30184daa26487706d4829f5cfb697a"},
+]
+django-environ = [
+    {file = "django-environ-0.4.5.tar.gz", hash = "sha256:6c9d87660142608f63ec7d5ce5564c49b603ea8ff25da595fd6098f6dc82afde"},
+    {file = "django_environ-0.4.5-py2.py3-none-any.whl", hash = "sha256:c57b3c11ec1f319d9474e3e5a79134f40174b17c7cc024bbb2fad84646b120c4"},
 ]
 ipython = [
     {file = "ipython-7.19.0-py3-none-any.whl", hash = "sha256:c987e8178ced651532b3b1ff9965925bfd445c279239697052561a9ab806d28f"},

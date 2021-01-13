@@ -5,9 +5,11 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
 
-from .forms import NewsForm, UserRegisterForm, UserLoginForm
+from .forms import NewsForm, UserRegisterForm, UserLoginForm, ContactForm
 from .models import News, Categories
 from .utils import MyMixin
+
+from django.core.mail import send_mail
 
 
 def register(request):
@@ -43,11 +45,20 @@ def user_logout(request):
 
 
 def test(request):
-    object = ['john', 'paul', 'george', 'ringo']
-    paginator = Paginator(object, 2)
-    page_num = request.GET.get('page', 1)
-    page_obj = paginator.get_page(page_num)
-    return render(request, 'news/test.html', {'page_obj': page_obj})
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'], 'blog@green-call.ru', ['swip88@bk.ru'], fail_silently=False)
+            if mail:
+                messages.success(request, 'Письмо отправлено')
+                return redirect('test')
+            else:
+                messages.error(request, 'Ошибка при отправке')
+        else:
+            messages.error(request, 'Ошибка регистрации')
+    else:
+        form = ContactForm()
+    return render(request, 'news/test.html', {'form': form})
 
 
 class HomeNews(MyMixin, ListView):
