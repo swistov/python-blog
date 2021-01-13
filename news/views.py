@@ -1,8 +1,19 @@
-from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from django.views.generic import ListView, DetailView, CreateView
+
 from .forms import NewsForm
 from .models import News, Categories
 from .utils import MyMixin
+
+
+def test(request):
+    object = ['john', 'paul', 'george', 'ringo']
+    paginator = Paginator(object, 2)
+    page_num = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_num)
+    return render(request, 'news/test.html', {'page_obj': page_obj})
 
 
 class HomeNews(MyMixin, ListView):
@@ -10,8 +21,9 @@ class HomeNews(MyMixin, ListView):
     template_name = 'news/home_news_list.html'
     context_object_name = 'news'
     # extra_context = {'title': 'Главная'}
-    queryset = News.objects.select_related('category')
+    queryset = News.objects.select_related('category').filter(is_published=True)
     mixin_prop = 'hello world'
+    paginate_by = 20
 
     def get_context_data(self, *, object_list=None, **kwargs):
         """Добавление кастомных полей"""
@@ -31,6 +43,7 @@ class NewsByCategory(MyMixin, ListView):
     context_object_name = 'news'
     """Запрет на показ пустых списков"""
     allow_empty = False
+    paginate_by = 5
 
     def get_queryset(self):
         """Выводить новости категории"""
@@ -59,43 +72,3 @@ class CreateNews(LoginRequiredMixin, CreateView):
     """Вместо перенаправления возвращает 403"""
     # raise_exception = True
     # success_url = reverse_lazy('home')
-
-
-# def index(request):
-#     news = News.objects.all()
-#     context = {
-#         "news": news,
-#         "title": "Список новостей",
-#     }
-#     return render(request=request, template_name="news/index.html", context=context)
-
-
-# def get_category(request, category_id: int):
-#     news = News.objects.filter(category_id=category_id)
-#     categories = Categories.objects.all()
-#     category = Categories.objects.get(pk=category_id)
-#     context = {
-#         "news": news,
-#         'categories': categories,
-#         'category': category,
-#     }
-#     return render(request, "news/category.html", context)
-
-
-# def view_news(request, news_id: int):
-#     # news_item = News.objects.get(pk=news_id)
-#     news_item = get_object_or_404(News, pk=news_id)
-#     return render(request, 'news/view_news.html', {'news_item': news_item})
-
-
-# def add_news(request):
-#     if request.method == 'POST':
-#         form = NewsForm(request.POST)
-#         if form.is_valid():
-#             # print(form.cleaned_data)
-#             # news = News.objects.create(**form.cleaned_data)
-#             news = form.save()
-#             return redirect(news)
-#     else:
-#         form = NewsForm()
-#     return render(request, 'news/add_news.html', {'form': form})
