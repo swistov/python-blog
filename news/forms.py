@@ -5,6 +5,29 @@ from django.core.exceptions import ValidationError
 
 from .models import News
 
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField(label='E-mail', help_text='Введите адрес почты', widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password2 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    """Переопределяем поля. Дефолтно не отображается нормально"""
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'rows': 5}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            # 'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            # 'password1': forms.PasswordInput(attrs={'class': 'form-control'}),
+            # 'password2': forms.PasswordInput(attrs={'class': 'form-control'}),
+        }
+
 
 class NewsForm(forms.ModelForm):
     """
