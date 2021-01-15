@@ -13,6 +13,7 @@ black = "^20.8b1"
 sentry-sdk = "^0.19.5"
 django-debug-toolbar = "^3.2"
 django-environ = "^0.4.5"
+django-ckeditor = "^6.0.0"
 
 [tool.poetry.dev-dependencies]
 

@@ -1,15 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
 
 from .forms import NewsForm, UserRegisterForm, UserLoginForm, ContactForm
 from .models import News, Categories
 from .utils import MyMixin
-
-from django.core.mail import send_mail
 
 
 def register(request):
@@ -48,7 +46,8 @@ def test(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'], 'blog@green-call.ru', ['swip88@bk.ru'], fail_silently=False)
+            mail = send_mail(form.cleaned_data['subject'], form.cleaned_data['content'], 'blog@green-call.ru',
+                             ['swip88@bk.ru'], fail_silently=True)
             if mail:
                 messages.success(request, 'Письмо отправлено')
                 return redirect('test')

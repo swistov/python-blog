@@ -22,6 +22,7 @@ from news import urls as news_urls
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
     path("", include(news_urls)),
 ]
 
