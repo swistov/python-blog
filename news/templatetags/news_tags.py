@@ -1,5 +1,6 @@
 from django import template
 from django.db.models import Count, F
+from django.core.cache import cache
 
 from news.models import Categories
 
@@ -13,6 +14,11 @@ def get_categories():
 
 @register.inclusion_tag('news/list_categories.html')
 def show_categories():
-    # categories = Categories.objects.filter(news__is_published=True).annotate(cnt=Count('news')).filter(cnt__gt=0)
+    """Cache"""
+    # categories = cache.get('categories')
+    # if not categories:
+    #     categories = Categories.objects.annotate(cnt=Count('news', filter=F('news__is_published'))).filter(cnt__gt=0)
+    #     cache.set('categories', categories, 30)
     categories = Categories.objects.annotate(cnt=Count('news', filter=F('news__is_published'))).filter(cnt__gt=0)
+
     return {'categories': categories}
