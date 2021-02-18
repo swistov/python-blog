@@ -15,6 +15,7 @@ django-debug-toolbar = "^3.2"
 django-environ = "^0.4.5"
 django-ckeditor = "^6.0.0"
 django-simple-captcha = "^0.5.13"
+django-mptt = "^0.11.0"
 
 [tool.poetry.dev-dependencies]
 

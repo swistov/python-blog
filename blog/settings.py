@@ -37,9 +37,15 @@ env = environ.Env(
 DEBUG = True
 
 sentry_sdk.init(
-    dsn="https://c7322fac44e74c719d42728e26681aba@sentry.green-call.ru/7",
+    # dsn="https://c7322fac44e74c719d42728e26681aba@sentry.green-call.ru/7",
+    # dsn='http://bc7d223aaff946e9b9948a31460e2d77@10.18.0.170:9000/56',
+    # dsn="http://1952ae82ccf142dfa9a64145784caa3e@10.18.0.175:9000/2",
+    # dsn="http://a960845ff96042e1a2c862b9c686b418@10.18.0.170:9000/85",
+    dsn="http://a960845ff96042e1a2c862b9c686b418@sentry.n3test.ru/85",
     integrations=[DjangoIntegration()],
     environment='development',
+    traces_sample_rate=1.0,
+    send_default_pii=True,
 )
 
 ALLOWED_HOSTS = ['localhost']
@@ -59,9 +65,11 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'captcha',
+    "mptt",
 
     # My apps
     "news.apps.NewsConfig",
+    "testapp.apps.TestappConfig",
 ]
 
 MIDDLEWARE = [
